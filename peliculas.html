@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <link href="https://fonts.cdnfonts.com/css/hustle" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="styledos.css"
+    <title></title>
+</head>
+<body>
+    <div style="margin: 24px;">
+        <nav class="navbar navbar-light" style="background-color: black;">
+            <div class="container">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="movies.html">Inicio</a>
+                    </li>
+                    <li>
+                        <a href="menu.html">Menu</a>
+                    </li>
+                    <li>
+                        <a href="pedido.html">Pedido</a>
+                    </li>
+                    <li>
+                        <a href="contacto.html">Contacto</a>
+                    </li>
+                    <li class="active">
+                        <a href="moviesdos.html">aaaaaaa</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <h1>Peliculas</h1>
+        <form id="form">
+            <input type="text" id="search" placeholder="Buscar">
+            <input type="submit" value="search">
+            </form>
+            <section id="main" class="movies"></section>
+    </div>
+    <script>
+        const API_URL = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=3fd2be6f0c70a2a598f084ddfb75487c&page=1';
+        const IMG_PATH = 'https://image.tmdb.org/t/p/w1280';
+        const SEARCH_API = 'https://api.themovie.db';
+
+        const main = document.getElementById('main');
+        const form = document.getElementById('form');
+        const search = document.getElementById('search');
+
+        getMovies(API_URL);
+
+        async function getMovies(url){
+            const res= await fetch(url);
+            const data = await res.json();
+            showMovies(data.results);
+        }
+            
+        function showMovies(movies){
+            main.innerHTML= '';
+            movies.forEach((movie) => {
+                const { title, poster_path, vote_average, overview, release_date} = movie;
+                 const movieEl = document.createElement('div');
+
+                 movieEl.classList.add('movie');
+                movieEl.innerHTML = `
+                <img src="${IMG_PATH + poster_path}" alt = "${title}">
+                <div class = "movie-info">
+                    <h3>${title}</h3>
+                        <span class="${getClassByRate(vote_average)}">${vote_average}</span>
+                        </div>
+                        <div class="overview">
+                            <h3> Overview </h3>
+                            ${overview}
+                            <h3>Release Date</h3>
+                            ${release_date} </div>`
+                main.appendChild(movieEl);
+            });
+        };
+
+
+        function getClassByRate(vote){
+            if(vote>=8){
+                return 'green';
+            }else if(vote>=5){
+                return 'orange';
+            }else{
+                return 'red';
+            }
+        }
+        form.addEventListener('submit', (e) =>{
+        e.preventDefault()
+        const searchTerm=search.value;
+        if(searchTerm && searchTerm !==''){
+            getMovies(SEARCH_API + searchTerm)
+            search.value='';
+        }else{
+            window.location.reload();
+        }
+    });
+    </script>
+    <div id="footer"></div>
+    <script>
+        $(function(){
+            $("#footer").load("/sd/footer.html");
+        });
+    </script>
+     <footer>
+        <div class="container">
+            <script>
+
+                const redessociales=document.querySelectorAll('.contact-links');
+                link.addEventListener('click', e =>{
+                    e.preventDefault();
+                    window.open(link.href, '_blank');
+                });
+
+            </script>
+</body>
+</html>
